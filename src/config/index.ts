@@ -13,5 +13,6 @@ function loadDotEnv() {
 loadDotEnv();
 
 export const serverConfig: ServerConfig = {
-  PORT: Number(process.env.PORT) || 4000
+  PORT: Number(process.env.PORT) || 4000,
+  MONGO_URI: process.env.MONGO_URI || "",
 }
