@@ -4,6 +4,7 @@ import { genericErrorHandler, globalErrorHandler } from './middleware/error/erro
 import { loggers } from './config/logger.config';
 import apiRouter from './router';
 import { attachCorrelationIdMiddleware } from './middleware/correlation/correlation.middleware';
+import { connectDB } from './db';
 
 
 const app = express();
@@ -20,5 +21,7 @@ app.use(genericErrorHandler)
 app.listen(serverConfig.PORT, async () => {
   loggers.info(`Server is running on port ${serverConfig.PORT}`);
   loggers.warning(`Press Ctrl+C to stop the server.`);
+
+  await connectDB();
   loggers.success(`Database connection has been established successfully.`);
 });
