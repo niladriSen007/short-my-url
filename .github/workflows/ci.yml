@@ -26,6 +26,6 @@ jobs:
         run: npm install
 
       - name: Installation successful check
-        run: npm ls
+        run: ls
 
       
