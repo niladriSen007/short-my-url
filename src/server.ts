@@ -1,11 +1,14 @@
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import express from 'express';
-import { serverConfig } from "./config"
-import { genericErrorHandler, globalErrorHandler } from './middleware/error/error.middleware';
+import { serverConfig } from "./config";
 import { loggers } from './config/logger.config';
-import apiRouter from './router';
-import { attachCorrelationIdMiddleware } from './middleware/correlation/correlation.middleware';
-import { connectDB } from './db';
 import { connectRedis } from './config/redis.config';
+import { connectDB } from './db';
+import { attachCorrelationIdMiddleware } from './middleware/correlation/correlation.middleware';
+import { genericErrorHandler, globalErrorHandler } from './middleware/error/error.middleware';
+import apiRouter from './router';
+import { trpcRouter } from './router/trpc';
+import { redirectUrl } from './controllers/url/url.controller';
 
 
 const app = express();
@@ -13,6 +16,12 @@ const app = express();
 app.use(express.json());
 
 app.use(attachCorrelationIdMiddleware);
+
+app.use("/trpc", createExpressMiddleware({
+  router: trpcRouter
+}))
+
+app.use("/:shortUrl", redirectUrl)
 
 app.use("/api", apiRouter)
 
